@@ -9,24 +9,31 @@ Created on Apr 6, 2012
 
 from nltk.corpus import stopwords, names, swadesh, wordnet
 from string import punctuation
+import base
+import en
+import logging
 import nltk
 import os
-import en
 import re
-import base 
+
+logger = logging.getLogger('util.Words')
+base.init_logger(logger)
 
 '''
 Frequency of words in a file.
 '''    
 def get_frequncy_dist(dir_path):
     files = os.listdir(dir_path)
-    file_handlers = []    
+    all_words = []    
+    '''get words'''
     for filename in files:
         if (filename.endswith('.srt')):
-            file_handlers.append(open(dir_path + '\\' + filename, 'r'))
+            file_handler = open(dir_path + '\\' + filename, 'r')
+            for line in file_handler :
+                for word in line.strip().split():
+                    all_words.append(word.strip(punctuation).lower()) 
+            file_handler.close()
 
-    '''get words'''
-    all_words = [word.strip(punctuation).lower() for file_hd in file_handlers for line in file_hd for word in line.strip().split()]
     words_wt_freq = {}
 
     ''' get count and ignore stop words'''
@@ -34,7 +41,7 @@ def get_frequncy_dist(dir_path):
         if (word.isalpha()):
             words_wt_freq[word.lower()] = words_wt_freq.get(word.lower(), 0) + 1
     all_size = len(words_wt_freq.keys()) 
-    print ('#words:' + str (all_size))
+    logger.debug('#words:' + str (all_size))
     lexical_diversity_for_freq(words_wt_freq.values())
 
     lemmatized_words_wt_freq = {}
@@ -46,7 +53,7 @@ def get_frequncy_dist(dir_path):
         else:
             lemmatized_words_wt_freq[word] = words_wt_freq.get(word)
     lemmatized_size = len(lemmatized_words_wt_freq.keys())            
-    print ('#words after lemmatized:' + str (lemmatized_size) + " diff: " + str (all_size - lemmatized_size))
+    logger.debug ('#words after lemmatized:' + str (lemmatized_size) + " diff: " + str (all_size - lemmatized_size))
     lexical_diversity_for_freq(lemmatized_words_wt_freq.values())
         
             
@@ -60,7 +67,7 @@ def get_frequncy_dist(dir_path):
     for word in  lemmatized_words_wt_freq.keys():
         if (len(wordnet.synsets(word)) != 0):
             usual_words.append(word)
-    print ('#words after filtering unused words:' + str (len(usual_words)) + " diff: " + str (lemmatized_size - len(usual_words)))
+    logger.debug ('#words after filtering unused words:' + str (len(usual_words)) + " diff: " + str (lemmatized_size - len(usual_words)))
     
     stopwords_en = stopwords.words('english')
     male_names = names.words('male.txt')
@@ -72,7 +79,7 @@ def get_frequncy_dist(dir_path):
     ignore_list.extend(female_names)
     ignore_list.extend(comparative)            
     filtered_words = [ word for word in usual_words if len(word) > 3 and word.lower() not in ignore_list]  
-    print ('#words after filtering stop words:' + str (len(filtered_words)) + " diff: " + str (len(usual_words) - len(filtered_words)))
+    logger.debug ('#words after filtering stop words:' + str (len(filtered_words)) + " diff: " + str (len(usual_words) - len(filtered_words)))
     
     tag_filtered_words_wt_freq = {}
     words_wt_tags = nltk.pos_tag(filtered_words)
@@ -107,7 +114,7 @@ def get_frequncy_dist(dir_path):
                 else:
                     tag_filtered_words_wt_freq[word] = lemmatized_words_wt_freq[word]        
                     #print (word,tag)   
-    print ('#words after filtering unwanted pos tags:' + str (len(tag_filtered_words_wt_freq.keys())) + " diff: " + str (len(filtered_words) - len(tag_filtered_words_wt_freq.keys())))
+    logger.debug ('#words after filtering unwanted pos tags:' + str (len(tag_filtered_words_wt_freq.keys())) + " diff: " + str (len(filtered_words) - len(tag_filtered_words_wt_freq.keys())))
     lexical_diversity_for_freq(tag_filtered_words_wt_freq.values())
 
 
@@ -116,7 +123,7 @@ def get_frequncy_dist(dir_path):
     non_basic_words_wt_freq = {}
     for non_basic_word in non_basic_words:
         non_basic_words_wt_freq[non_basic_word] = tag_filtered_words_wt_freq[non_basic_word] 
-    print ('#words after filtering basic words:' + str (len(non_basic_words_wt_freq.keys())) + " diff: " + str (len(tag_filtered_words_wt_freq.keys()) - len(non_basic_words_wt_freq.keys())))
+    logger.debug ('#words after filtering basic words:' + str (len(non_basic_words_wt_freq.keys())) + " diff: " + str (len(tag_filtered_words_wt_freq.keys()) - len(non_basic_words_wt_freq.keys())))
     lexical_diversity_for_freq(non_basic_words_wt_freq.values())
     
 
@@ -126,7 +133,7 @@ def get_frequncy_dist(dir_path):
     new_words_wt_freq = {}
     for new_word in new_words:
         new_words_wt_freq[new_word] = non_basic_words_wt_freq[new_word] 
-    print ('#words after filtering my words:' + str (len(new_words_wt_freq.keys())) + " diff: " + str (len(non_basic_words_wt_freq.keys()) - len(new_words_wt_freq.keys())))
+    logger.debug ('#words after filtering my words:' + str (len(new_words_wt_freq.keys())) + " diff: " + str (len(non_basic_words_wt_freq.keys()) - len(new_words_wt_freq.keys())))
     lexical_diversity_for_freq(new_words_wt_freq.values())
         
     return new_words_wt_freq
@@ -147,7 +154,7 @@ def lexical_diversity_for_freq(values):
         total_words += value
         uniq_words += 1
     if total_words != 0 :
-        print ('Lexical Diversity : ' + str(round ((uniq_words / total_words) * 100, 2)))
+        logger.debug ('Lexical Diversity : ' + str(round ((uniq_words / total_words) * 100, 2)))
         
 def long_words (words, size):
     long_words = [w for w in words if len(w) > size]
