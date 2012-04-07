@@ -13,6 +13,7 @@ import nltk
 import os
 import en
 import re
+import base 
 
 '''
 Frequency of words in a file.
@@ -119,7 +120,7 @@ def get_frequncy_dist(dir_path):
     lexical_diversity_for_freq(non_basic_words_wt_freq.values())
     
 
-    fh = open('C:\\Users\\Tyler\\workspace\\python\\etc\\iknew.csv', 'r')
+    fh = open(os.path.join(base.app_root(), 'etc\mywords.csv'), 'r')
     my_words = [word.lower() for line in fh for word in line.strip().split()]
     new_words = set(non_basic_words).difference(my_words)
     new_words_wt_freq = {}
