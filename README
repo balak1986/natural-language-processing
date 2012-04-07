@@ -1,1 +1,1 @@
-Test
+com.dexter.nlp.script.Lexicon - Script to compile lexicon from distinct subtitle (srt) files from the given after lemmatized, removing unusual, filtering stop words, filtering unwanted part-of-speech tags, filtering basic words and filtering mywords
