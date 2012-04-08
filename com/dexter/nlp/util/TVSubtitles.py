@@ -1,7 +1,9 @@
 '''
 Created on Apr 7, 2012
 
-@author: Tyler
+com.dexter.nlp.util.TVSubtitles - Downloads TV Show subtitles from tvsubtitles.com
+
+@author: Bala
 '''
 
 from lxml.html import fromstring
@@ -15,7 +17,7 @@ import re
 
 logger = logging.getLogger('util.Files')
 base.init_logger(logger)
-
+                 
 HOME_URL = 'http://www.tvsubtitles.net'
 dl_links = {}
 
