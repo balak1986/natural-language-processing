@@ -131,7 +131,7 @@ def get_frequncy_dist(dir_path):
     lemmatized_words_wt_freq = {} # save memory
 
 
-    basic_english_vocab = set() #en.basic.words
+    basic_english_vocab = en.basic.words
     non_basic_words = set(tag_filtered_words_wt_freq.keys()).difference(basic_english_vocab)
     non_basic_words_wt_freq = {}
     for non_basic_word in non_basic_words:
