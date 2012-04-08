@@ -27,8 +27,7 @@ Frequency of words in a file.
 '''    
 def get_frequncy_dist(dir_path):
     files = os.listdir(dir_path)
-    out_file = open(dir_path + '\\wfd.csv', 'w')
-    out_file.write ('Word, Type, Frequency \n')
+
     all_words = 0
     words_wt_freq = {}   
     '''get words'''
@@ -60,16 +59,6 @@ def get_frequncy_dist(dir_path):
     lexical_diversity_for_freq(lemmatized_words_wt_freq.values())
     words_wt_freq = {} # Save memory
 
-
-    '''wordnet has 155k'''                                 
-    usual_words = []
-    for word in  lemmatized_words_wt_freq.keys():
-        if (len(wordnet.synsets(word)) != 0):
-            usual_words.append(word)
-        else:
-            out_file.write(word + ',not in wordnet,' + str(lemmatized_words_wt_freq.get(word)) + '\n')
-    logger.debug ('# words after filtering unused words: ' + str (len(usual_words)) + " diff: " + str (lemmatized_size - len(usual_words)))
-    
     
     stopwords_en = stopwords.words('english')
     male_names = names.words('male.txt')
@@ -81,18 +70,30 @@ def get_frequncy_dist(dir_path):
     ignore_list.extend(female_names)
     ignore_list.extend(comparative)            
     filtered_words = []
-    for word in usual_words:
-        if len(word) > 3 and word not in ignore_list:
+
+    out_file = open(dir_path + '\\wfd.csv', 'w')
+    out_file.write ('Word, Type, Frequency \n')
+        
+    for word in lemmatized_words_wt_freq.keys():
+        if len(word) > 2 and word not in ignore_list:
             filtered_words.append(word)   
         else:
             out_file.write(word + ',stop words,' + str(lemmatized_words_wt_freq.get(word)) + '\n')
-    logger.debug ('# words after filtering stop words: ' + str (len(filtered_words)) + " diff: " + str (len(usual_words) - len(filtered_words)))
-    usual_words = [] #save memory
+    logger.debug ('# words after filtering stop words: ' + str (len(filtered_words)) + " diff: " + str (len(lemmatized_words_wt_freq.keys()) - len(filtered_words)))
     ignore_list = [] #save memory
 
+    '''wordnet has 155k'''                                 
+    usual_words = []
+    for word in  filtered_words:
+        if (len(wordnet.synsets(word)) != 0):
+            usual_words.append(word)
+        else:
+            out_file.write(word + ',not in wordnet,' + str(lemmatized_words_wt_freq.get(word)) + '\n')
+    logger.debug ('# words after filtering unused words: ' + str (len(usual_words)) + " diff: " + str (lemmatized_size - len(usual_words)))
+    filtered_words = [] # save memory 
 
     tag_filtered_words_wt_freq = {}
-    words_wt_tags = nltk.pos_tag(filtered_words)
+    words_wt_tags = nltk.pos_tag(usual_words)
     for (word, tag) in words_wt_tags:
         if (tag not in ['EX', 'DET', 'CNJ', 'FW', 'MD', 'NP', 'NUM', 'PRO', 'P', 'TO', 'UH', 'WH', 'WP', 'NNP', 'MOD']):
             if(en.is_adverb(word)):
@@ -126,10 +127,10 @@ def get_frequncy_dist(dir_path):
                     #print (word,tag)   
         else:
             out_file.write(word + ',unwanted pos,' + str(lemmatized_words_wt_freq.get(word)) + '\n')
-    logger.debug ('# words after filtering unwanted pos:' + str (len(tag_filtered_words_wt_freq.keys())) + " diff: " + str (len(filtered_words) - len(tag_filtered_words_wt_freq.keys())))
+    logger.debug ('# words after filtering unwanted pos:' + str (len(tag_filtered_words_wt_freq.keys())) + " diff: " + str (len(usual_words) - len(tag_filtered_words_wt_freq.keys())))
     lexical_diversity_for_freq(tag_filtered_words_wt_freq.values())
     lemmatized_words_wt_freq = {} # save memory
-
+    usual_words = [] #save memory
 
     basic_english_vocab = en.basic.words
     non_basic_words = set(tag_filtered_words_wt_freq.keys()).difference(basic_english_vocab)
