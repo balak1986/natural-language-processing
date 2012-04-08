@@ -5,9 +5,9 @@ com.dexter.nlp.script.Lexicon - Generate lexicons from distinct subtitle (srt) f
 
 @author: Bala
 '''
-from com.dexter.nlp.util.Files import get_distinct_files, copy_files, \
+from com.dexter.nlp.util.files import get_distinct_files, copy_files, \
     unzip_files
-from com.dexter.nlp.util.Words import get_frequncy_dist
+from com.dexter.nlp.util.words import get_frequncy_dist
 from operator import itemgetter
 from time import strftime, gmtime, time
 import base
