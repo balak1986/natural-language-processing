@@ -2,6 +2,8 @@
 '''
 Created on Apr 6, 2012
 
+com.dexter.nlp.util.Words - Finds frequency distribution of words after lemmatized, removing unusual, filtering stop words, filtering unwanted part-of-speech tags, and filtering basic words
+
 @author: Bala
 '''
 
@@ -118,7 +120,7 @@ def get_frequncy_dist(dir_path):
     lexical_diversity_for_freq(tag_filtered_words_wt_freq.values())
 
 
-    basic_english_vocab = en.basic.words
+    basic_english_vocab = set() #en.basic.words
     non_basic_words = set(tag_filtered_words_wt_freq.keys()).difference(basic_english_vocab)
     non_basic_words_wt_freq = {}
     for non_basic_word in non_basic_words:
@@ -127,7 +129,7 @@ def get_frequncy_dist(dir_path):
     lexical_diversity_for_freq(non_basic_words_wt_freq.values())
     
 
-    fh = open(os.path.join(base.app_root(), 'etc\basic_words.csv'), 'r')
+    fh = open(os.path.join(base.app_root(), 'etc\\basic_words.csv'), 'r')
     my_words = [word.lower() for line in fh for word in line.strip().split()]
     new_words = set(non_basic_words).difference(my_words)
     new_words_wt_freq = {}
