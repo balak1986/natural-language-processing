@@ -1,14 +1,17 @@
 '''
 Created on Apr 6, 2012
 
+com.dexter.nlp.script.Lexicon - Generate lexicons from distinct subtitle (srt) files from the given dir after lemmatized, removing unusual, filtering stop words, filtering unwanted part-of-speech tags, and filtering basic words
+
 @author: Bala
 '''
-from com.dexter.nlp.util.Files import get_distinct_files, copy_files, unzip_files
+from com.dexter.nlp.util.Files import get_distinct_files, copy_files, \
+    unzip_files
 from com.dexter.nlp.util.Words import get_frequncy_dist
 from operator import itemgetter
 from time import strftime, gmtime, time
-import logging
 import base
+import logging
 
 logger = logging.getLogger('script.Lexicon')
 base.init_logger(logger)

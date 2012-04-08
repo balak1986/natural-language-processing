@@ -1,15 +1,17 @@
 '''
 Created on Apr 7, 2012
 
-@author: Tyler
+com.dexter.nlp.util.TVSubtitles - Downloads TV Show subtitles from tvsubtitles.com
+
+@author: Bala
 '''
 
 from lxml.html import fromstring
+from time import strftime, gmtime, time
 from urllib2 import urlopen, URLError, HTTPError
 import base
 import os
 import re
-from time import strftime, gmtime, time
 
 HOME_URL = 'http://www.tvsubtitles.net'
 dl_links = {}
@@ -60,7 +62,7 @@ def download_tvsubtitles(show_name, des_dir):
 if __name__ == '__main__':
     startTime = time()
     cache_dl_links()
-    my_shows = ['The O.C.', '24', 'Alias', 'Band of Brothers', 'Breaking Bad', 'Chuck', 'Dexter', 'Doctor Who', 'FlashForward', 'Friends', 'Fringe', 'Heroes', 'House M.D.', 'How I Met Your Mother', 'Lost', 'Modern Family', 'Persons Unknown', 'Prison Break', 'Six Feet Under', 'Supernatural', 'Seinfeld', 'Scrubs', 'The Big Bang Theory', 'The IT Crowd', 'The Killing', 'The Mentalist', 'The Office', 'Two and a Half Men', 'Justified', 'Jericho', 'One Tree Hill', 'Workaholics', 'Suits', 'True Blood', 'Mad Men', 'Game of Thrones','Batman','Family Guy','Futurama','South Park','The Simpsons','Tom and Jerry','Scooby Doo, Where Are You!','The Mask','Avatar: The Last Airbender','The Adventures of Tintin']
+    my_shows = ['The O.C.', '24', 'Alias', 'Band of Brothers', 'Breaking Bad', 'Chuck', 'Dexter', 'Doctor Who', 'FlashForward', 'Friends', 'Fringe', 'Heroes', 'House M.D.', 'How I Met Your Mother', 'Lost', 'Modern Family', 'Persons Unknown', 'Prison Break', 'Six Feet Under', 'Supernatural', 'Seinfeld', 'Scrubs', 'The Big Bang Theory', 'The IT Crowd', 'The Killing', 'The Mentalist', 'The Office', 'Two and a Half Men', 'Justified', 'Jericho', 'One Tree Hill', 'Workaholics', 'Suits', 'True Blood', 'Mad Men', 'Game of Thrones', 'Batman', 'Family Guy', 'Futurama', 'South Park', 'The Simpsons', 'Tom and Jerry', 'Scooby Doo, Where Are You!', 'The Mask', 'Avatar: The Last Airbender', 'The Adventures of Tintin']
     for show in my_shows:
         download_tvsubtitles(show, base.temp_dir())
     print "Total time taken: " + strftime('%H:%M:%S', gmtime(time() - startTime))

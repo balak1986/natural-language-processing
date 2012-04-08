@@ -2,6 +2,8 @@
 '''
 Created on Apr 6, 2012
 
+com.dexter.nlp.util.Words - Finds frequency distribution of words after lemmatized, removing unusual, filtering stop words, filtering unwanted part-of-speech tags, and filtering basic words
+
 @author: Bala
 '''
 

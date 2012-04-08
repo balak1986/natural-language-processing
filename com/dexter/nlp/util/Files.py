@@ -3,11 +3,12 @@ Created on Apr 6, 2012
 
 @author: Bala
 '''
-import os,zipfile
+import base
+import logging
+import os
+import zipfile
 import re
 import shutil
-import logging
-import base
 
 logger = logging.getLogger('util.Files')
 base.init_logger(logger)

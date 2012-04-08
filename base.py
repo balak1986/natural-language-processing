@@ -4,7 +4,8 @@ Created on Apr 7, 2012
 @author: Bala
 '''
 
-import os,logging
+import os
+import logging
 
 def app_root():
     return os.path.dirname(__file__)
