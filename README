@@ -2,4 +2,4 @@ com.dexter.nlp.script.Lexicon - Generates lexicons from files from the given dir
 
 com.dexter.nlp.util.TVSubtitles - Downloads TV Show subtitles from tvsubtitles.com
 
-com.dexter.nlp.util.Words - Finds frequency distribution of words
+com.dexter.nlp.util.Words - Finds frequency distribution of words, & categorize them 
